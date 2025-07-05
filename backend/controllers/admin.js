@@ -1233,15 +1233,13 @@ exports.createCourseAsAdmin = async (req, res) => {
             });
         }
 
-        // Upload thumbnail to Cloudinary
-        const { uploadImageToCloudinary } = require('../utils/imageUploader');
-        console.log('Uploading thumbnail to Cloudinary...');
-        if (!process.env.FOLDER_NAME) {
-            console.error('FOLDER_NAME environment variable is not set');
-        }
-        const thumbnailImage = await uploadImageToCloudinary(
+        // Upload thumbnail to Supabase
+        const { uploadImageToSupabase } = require('../utils/supabaseUploader');
+        console.log('Uploading thumbnail to Supabase...');
+        
+        const thumbnailImage = await uploadImageToSupabase(
             thumbnailFile,
-            process.env.FOLDER_NAME || 'default_folder'
+            'courses'
         );
         console.log('Thumbnail uploaded successfully:', thumbnailImage.secure_url);
 

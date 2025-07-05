@@ -8,7 +8,7 @@ const CourseProgress = require('../models/courseProgress');
 const Certificate = require('../models/certificate');
 const RatingAndReview = require('../models/ratingAndReview');
 
-const { uploadImageToCloudinary, deleteResourceFromCloudinary } = require('../utils/imageUploader');
+const { uploadImageToSupabase, deleteFileFromSupabase } = require('../utils/supabaseUploader');
 const { convertSecondsToDuration } = require('../utils/secToDuration');
 const { cleanupCourseFiles } = require('../utils/fileCleanup');
 
@@ -86,10 +86,11 @@ exports.deleteAccount = async (req, res) => {
             });
         }
 
-        // delete user profile picture From Cloudinary if exists
+        // delete user profile picture from Supabase if exists
         if (userDetails.image && !userDetails.image.includes('dicebear')) {
-            // Only try to delete if it's a Cloudinary image (not a default avatar)
-            await deleteResourceFromCloudinary(userDetails.image);
+            // Only try to delete if it's a storage image (not a default avatar)
+            await deleteFileFromSupabase(userDetails.image);
+            console.log('✅ Profile image deleted from Supabase');
         }
 
         // Update enrolled courses
@@ -116,9 +117,10 @@ exports.deleteAccount = async (req, res) => {
                     });
                 }
 
-                // Delete course thumbnail from Cloudinary
+                // Delete course thumbnail from Supabase
                 if (course.thumbnail) {
-                    await deleteResourceFromCloudinary(course.thumbnail);
+                    await deleteFileFromSupabase(course.thumbnail);
+                    console.log('✅ Course thumbnail deleted from Supabase');
                 }
 
                 // Delete course reviews, progress, and certificates
@@ -150,7 +152,8 @@ exports.deleteAccount = async (req, res) => {
                     ...allSubSectionIds.map(async (subSectionId) => {
                         const subSection = await SubSection.findById(subSectionId);
                         if (subSection?.videoUrl) {
-                            await deleteResourceFromCloudinary(subSection.videoUrl);
+                            await deleteFileFromSupabase(subSection.videoUrl);
+                            console.log('✅ Video deleted from Supabase');
                         }
                         await SubSection.findByIdAndDelete(subSectionId);
                     }),
@@ -249,9 +252,9 @@ exports.updateUserProfileImage = async (req, res) => {
 
         console.log('profileImage = ', profileImage);
 
-        // upload image to cloudinary
-        const image = await uploadImageToCloudinary(profileImage,
-            process.env.FOLDER_NAME, 1000, 1000);
+        // upload image to Supabase
+        const image = await uploadImageToSupabase(profileImage, 'profiles', 1000, 1000);
+        console.log('✅ Profile image uploaded to Supabase:', image.secure_url);
 
         console.log('image url - ', image);
 

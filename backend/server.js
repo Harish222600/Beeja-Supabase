@@ -12,9 +12,9 @@ const server = http.createServer(app);
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-// connection to DB and cloudinary
+// connection to DB and Supabase
 const { connectDB } = require('./config/database');
-const { cloudinaryConnect } = require('./config/cloudinary');
+const { initializeStorageBuckets } = require('./config/supabaseStorage');
 
 // routes
 const userRoutes = require('./routes/user');
@@ -275,7 +275,7 @@ app.use((err, req, res, next) => {
 
 // connections
 connectDB();
-cloudinaryConnect();
+initializeStorageBuckets();
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {

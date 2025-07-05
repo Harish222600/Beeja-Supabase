@@ -3,7 +3,7 @@ const Message = require('../models/message');
 const Course = require('../models/course');
 const User = require('../models/user');
 const Notification = require('../models/notification');
-const { uploadImageToCloudinary } = require('../utils/imageUploader');
+const { uploadImageToSupabase } = require('../utils/supabaseUploader');
 
 // ================ STUDENT FUNCTIONS ================
 
@@ -548,8 +548,10 @@ exports.sendMessage = async (req, res) => {
                 });
             }
 
-            console.log('Uploading image to Cloudinary...');
-            const uploadResult = await uploadImageToCloudinary(req.file, 'chat-images');
+            console.log('Uploading image to Supabase...');
+
+            const uploadResult = await uploadImageToSupabase(req.file, 'chat-files');
+            console.log('✅ Chat image uploaded to Supabase:', uploadResult.secure_url);
             
             console.log('Upload result received:', uploadResult);
             

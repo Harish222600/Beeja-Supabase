@@ -2,7 +2,7 @@ const Section = require('../models/section');
 const SubSection = require('../models/subSection');
 const Course = require('../models/course');
 const Quiz = require('../models/quiz');
-const { uploadImageToCloudinary } = require('../utils/imageUploader');
+const { uploadFileToSupabase } = require('../utils/supabaseUploader');
 const { createNewContentNotification } = require('./notification');
 const { handleNewContentAddition } = require('../utils/certificateRegeneration');
 
@@ -59,7 +59,8 @@ exports.updateSubSection = async (req, res) => {
                 }, 600000); // 10 minutes
 
                 try {
-                    const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME);
+                    const uploadDetails = await uploadFileToSupabase(video, 'videos');
+                    console.log('✅ Video uploaded to Supabase:', uploadDetails.secure_url);
                     
                     // Clear the timeout as upload succeeded
                     clearTimeout(uploadTimeout);
@@ -241,11 +242,9 @@ exports.createSubSection = async (req, res) => {
                 }, 600000); // 10 minutes
 
                 try {
-                    // upload video to cloudinary with enhanced options
-                    const videoFileDetails = await uploadImageToCloudinary(
-                        videoFile, 
-                        folderName
-                    );
+                    // upload video to Supabase
+                    const videoFileDetails = await uploadFileToSupabase(videoFile, 'videos');
+                    console.log('✅ Video uploaded to Supabase:', videoFileDetails.secure_url);
                     
                     // Clear the timeout as upload succeeded
                     clearTimeout(uploadTimeout);

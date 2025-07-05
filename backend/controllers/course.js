@@ -6,7 +6,7 @@ const SubSection = require('../models/subSection')
 const CourseProgress = require('../models/courseProgress')
 const RatingAndReview = require('../models/ratingAndReview')
 
-const { uploadImageToCloudinary, deleteResourceFromCloudinary } = require('../utils/imageUploader');
+const { uploadImageToSupabase, deleteFileFromSupabase } = require('../utils/supabaseUploader');
 const { convertSecondsToDuration } = require("../utils/secToDuration")
 const { cleanupCourseFiles } = require('../utils/fileCleanup');
 const mongoose = require('mongoose');
@@ -148,8 +148,9 @@ exports.createCourse = async (req, res) => {
             })
         }
 
-        // upload thumbnail to cloudinary
-        const thumbnailDetails = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME);
+        // upload thumbnail to Supabase
+        const thumbnailDetails = await uploadImageToSupabase(thumbnail, 'courses');
+        console.log('✅ Thumbnail uploaded to Supabase:', thumbnailDetails.secure_url);
 
         if (!thumbnailDetails || !thumbnailDetails.secure_url) {
             return res.status(500).json({
@@ -588,10 +589,9 @@ exports.editCourse = async (req, res) => {
         if (req.file) {
             try {
                 console.log("Uploading new thumbnail image");
-                const thumbnailImage = await uploadImageToCloudinary(
-                    req.file,
-                    process.env.FOLDER_NAME
-                );
+                const thumbnailImage = await uploadImageToSupabase(req.file, 'courses');
+                console.log('✅ New thumbnail uploaded to Supabase:', thumbnailImage.secure_url);
+                
                 if (!thumbnailImage || !thumbnailImage.secure_url) {
                     throw new Error("Failed to upload thumbnail image");
                 }
@@ -784,8 +784,11 @@ exports.deleteCourse = async (req, res) => {
             })
         }
 
-        // Delete course thumbnail From Cloudinary
-        await deleteResourceFromCloudinary(course?.thumbnail);
+        // Delete course thumbnail from Supabase
+        if (course?.thumbnail) {
+            await deleteFileFromSupabase(course.thumbnail);
+            console.log('✅ Thumbnail deleted from Supabase');
+        }
 
         // Delete course reviews
         await RatingAndReview.deleteMany({ course: courseId });
@@ -822,7 +825,8 @@ exports.deleteCourse = async (req, res) => {
             ...allSubSectionIds.map(async (subSectionId) => {
                 const subSection = await SubSection.findById(subSectionId);
                 if (subSection?.videoUrl) {
-                    await deleteResourceFromCloudinary(subSection.videoUrl);
+                    await deleteFileFromSupabase(subSection.videoUrl);
+                    console.log('✅ Video deleted from Supabase');
                 }
                 await SubSection.findByIdAndDelete(subSectionId);
             }),

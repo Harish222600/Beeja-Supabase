@@ -113,7 +113,7 @@ export default function SubSectionModal({ modalData, setModalData, add = false, 
 
     setLoading(true)
     
-    const toastId = toast.loading("Adding lecture...")
+    
     
     try {
       const formData = new FormData()
@@ -135,7 +135,6 @@ export default function SubSectionModal({ modalData, setModalData, add = false, 
           )
         ])
 
-        clearTimeout(timeoutId)
         
         if (subsectionResult) {
           // Update course structure

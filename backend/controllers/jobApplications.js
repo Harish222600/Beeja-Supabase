@@ -1,8 +1,7 @@
 const JobApplication = require('../models/jobApplication');
 const Job = require('../models/job');
-const { uploadImageToCloudinary } = require('../utils/imageUploader');
-const { uploadResumeToCloudinary } = require('../utils/resumeUploader');
-const { generateSignedUrl } = require('../utils/cloudinaryHelper');
+const { uploadResumeToSupabase } = require('../utils/supabaseUploader');
+const { generateSignedUrl: generateSupabaseSignedUrl } = require('../utils/supabaseHelper');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
@@ -110,13 +109,11 @@ exports.submitApplication = async (req, res) => {
             });
         }
 
-        console.log('Uploading resume to Cloudinary...');
+        console.log('Uploading resume to Supabase...');
         
-        // Upload resume to Cloudinary
-        const resumeUpload = await uploadResumeToCloudinary(
-            resumeFile,
-            process.env.FOLDER_NAME || 'resumes'
-        );
+        // Upload resume to Supabase
+        const resumeUpload = await uploadResumeToSupabase(resumeFile, 'documents', null, null);
+        console.log('✅ Resume uploaded to Supabase:', resumeUpload.secure_url);
 
         console.log('Resume uploaded successfully:', resumeUpload.secure_url);
 
