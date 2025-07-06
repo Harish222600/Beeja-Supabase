@@ -26,6 +26,7 @@ const ContactMessages = lazy(() => import('../../components/core/Dashboard/Admin
 const FaqManagement = lazy(() => import('./components/FaqManagement'));
 const AdminChats = lazy(() => import('../Dashboard/AdminChats'));
 const CareersManagement = lazy(() => import('./components/CareersManagement'));
+const ReviewManagement = lazy(() => import('./components/ReviewManagement'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -52,6 +53,7 @@ const AdminDashboard = () => {
     { id: 'studentProgress', label: 'Student Progress', icon: <FaChartLine className="w-5 h-5" /> },
     { id: 'quizzes', label: 'Quiz Management', icon: <FaQuestionCircle className="w-5 h-5" /> },
     { id: 'featuredCourses', label: 'Featured Courses Management', icon: <FaUsers className="w-5 h-5" /> },
+    { id: 'reviews', label: 'Review ', icon: <FaUsers className="w-5 h-5" /> },
     { id: 'accessRequests', label: 'Access Requests', icon: <FaUsers className="w-5 h-5" /> },
     { id: 'bundleRequests', label: 'Bundle Requests', icon: <FaUsers className="w-5 h-5" /> },
     { id: 'orders', label: 'Orders', icon: <VscPackage className="w-5 h-5" /> },
@@ -117,6 +119,7 @@ const AdminDashboard = () => {
                     {activeTab === 'notifications' && <NotificationManagement />}
                     {activeTab === 'contactMessages' && <ContactMessages />}
                     {activeTab === 'featuredCourses' && <FeaturedCoursesManagement />}
+                    {activeTab === 'reviews' && <ReviewManagement />}
                     {activeTab === 'faqs' && <FaqManagement />}
                     {activeTab === 'chats' && <AdminChats />}
                     {activeTab === 'careers' && <CareersManagement />}
