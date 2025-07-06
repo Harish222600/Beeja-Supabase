@@ -34,29 +34,36 @@ export default function Certificates() {
   }
 
   return (
-    <>
-      <h1 className="mb-14 text-3xl font-medium text-richblack-5">My Certificates</h1>
+    <div className="px-4 sm:px-6 lg:px-0">
+      <h1 className="mb-8 sm:mb-12 lg:mb-14 text-2xl sm:text-3xl font-medium text-richblack-5">My Certificates</h1>
       {certificates.length === 0 ? (
-        <p className="text-center text-richblack-100">
-          You haven't earned any certificates yet. Complete a course to get your first certificate!
-        </p>
+        <div className="text-center py-12 sm:py-16">
+          <p className="text-richblack-100 text-base sm:text-lg leading-relaxed max-w-md mx-auto">
+            You haven't earned any certificates yet. Complete a course to get your first certificate!
+          </p>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {certificates.map((certificate) => (
             <div
               key={certificate.certificateId}
               onClick={() => setSelectedCertificate(certificate)}
-              className="cursor-pointer rounded-lg border border-richblack-700 bg-richblack-800 p-4 hover:scale-105 transition-transform"
+              className="cursor-pointer rounded-lg border border-richblack-700 bg-richblack-800 p-4 sm:p-6 hover:scale-105 hover:border-richblack-600 transition-all duration-200 active:scale-95"
             >
-              <h3 className="text-lg font-semibold text-richblack-5 mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-richblack-5 mb-3 leading-tight line-clamp-2">
                 {certificate.courseName}
               </h3>
-              <div className="text-sm text-richblack-300">
-                <p>Certificate ID: {certificate.certificateId}</p>
-                <p>Completed on: {formatDate(certificate.completionDate)}</p>
+              <div className="text-sm text-richblack-300 space-y-1 sm:space-y-2">
+                <p className="break-all">
+                  <span className="font-medium">Certificate ID:</span> {certificate.certificateId}
+                </p>
+                <p>
+                  <span className="font-medium">Completed on:</span> {formatDate(certificate.completionDate)}
+                </p>
               </div>
-              <button className="mt-4 text-yellow-50 text-sm">
-                View Certificate →
+              <button className="mt-4 text-yellow-50 text-sm font-medium hover:text-yellow-25 transition-colors flex items-center gap-1">
+                View Certificate 
+                <span className="text-xs">→</span>
               </button>
             </div>
           ))}
@@ -69,6 +76,6 @@ export default function Certificates() {
           onClose={() => setSelectedCertificate(null)}
         />
       )}
-    </>
+    </div>
   );
 }
