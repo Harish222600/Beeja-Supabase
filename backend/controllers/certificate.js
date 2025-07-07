@@ -180,21 +180,35 @@ exports.generateCertificate = async (req, res) => {
         issuedDate: new Date()
       });
     } else {
-      // Certificate already exists - update the issue date to current date
-      // This handles the case where new content was added to the course
-      // and the student completed it again
-      certificate.issuedDate = new Date();
-      certificate.completionDate = new Date();
-      certificate.categoryName = course.category?.name || 'General';
-      await certificate.save();
+      // Certificate already exists - only update if this is a new completion after course modification
+      // Check if the course has been modified since the certificate was last issued
       
-      console.log(`Certificate updated for student: ${user.firstName} ${user.lastName}, Course: ${course.courseName}, New Issue Date: ${certificate.issuedDate}`);
+      // Get the course progress to check when it was last updated
+      const progressLastUpdated = courseProgress.updatedAt;
+      const certificateLastIssued = certificate.issuedDate;
+      
+      // If the progress was updated after the certificate was issued, it means student completed new content
+      if (progressLastUpdated > certificateLastIssued) {
+        // Student has completed new content since certificate was issued
+        certificate.issuedDate = new Date();
+        certificate.completionDate = new Date();
+        certificate.categoryName = course.category?.name || 'General';
+        await certificate.save();
+        
+        console.log(`Certificate regenerated - student completed new content. Student: ${user.firstName} ${user.lastName}, Course: ${course.courseName}, New dates: ${certificate.issuedDate}`);
+      } else {
+        // No new completion, just return existing certificate
+        console.log(`Returning existing certificate - no new completion. Student: ${user.firstName} ${user.lastName}, Course: ${course.courseName}, Original dates: ${certificate.issuedDate}`);
+      }
     }
 
+    // Ensure we return the most up-to-date certificate data
+    const updatedCertificate = await Certificate.findById(certificate._id);
+    
     return res.status(200).json({
       success: true,
       message: "Certificate generated successfully",
-      data: certificate
+      data: updatedCertificate
     });
 
   } catch (error) {

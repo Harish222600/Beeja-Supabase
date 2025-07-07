@@ -22,7 +22,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
   }, [certificateData?.certificateId]);
 
   const certificateStyle = {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Poppins', 'Montserrat', 'Inter', sans-serif",
     width: '1000px',
     height: '700px',
     margin: '0 auto',
@@ -44,7 +44,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
 
   return (
     <div style={certificateStyle} role="main" aria-label="Enhanced Certificate from Beeja Academy">
-      {/* Watermark */}
+{/* Watermark */}
       <div style={{
         position: 'absolute',
         top: '50%',
@@ -203,10 +203,12 @@ export default function CleanInternshipCertificate({ certificateData }) {
             }}
           />
           <div style={{
-            fontWeight: '700',
-            fontSize: '1.5rem',
+            fontFamily: "'Raleway', 'Lato', sans-serif",
+            fontWeight: '600',
+            fontSize: '1.6rem',
             color: '#111827',
-            userSelect: 'none'
+            userSelect: 'none',
+            letterSpacing: '0.05em'
           }}>
             Beeja Academy
           </div>
@@ -226,14 +228,15 @@ export default function CleanInternshipCertificate({ certificateData }) {
       {/* Title */}
       <h1 style={{
         textAlign: 'center',
-        fontWeight: '900',
-        fontSize: '2.5rem',
-        letterSpacing: '0.15em',
-        marginBottom: '12px',
-        color: '#222222',
+        fontFamily: "'Playfair Display', 'Georgia', serif",
+        fontWeight: '700',
+        fontSize: '3rem',
+        letterSpacing: '0.1em',
+        marginBottom: '3px',
+        color: '#1a1a1a',
         userSelect: 'none',
         position: 'relative',
-        zIndex: '2'
+        zIndex: '2',
       }}>
         CERTIFICATE
       </h1>
@@ -244,7 +247,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
         color: '#7ee8fa',
         fontSize: '1.5rem',
         letterSpacing: '0.5em',
-        marginBottom: '30px',
+        marginBottom: '18px',
         userSelect: 'none',
         position: 'relative',
         zIndex: '2'
@@ -273,15 +276,16 @@ export default function CleanInternshipCertificate({ certificateData }) {
         </div>
 
         <div style={{
-          fontSize: '2.2rem',
-          fontWeight: '700',
+          fontFamily: "'Dancing Script', 'Brush Script MT', cursive",
+          fontSize: '2.8rem',
+          fontWeight: '600',
           color: '#7a6fff',
           marginBottom: '30px',
           borderBottom: '3px solid #7ee8fa',
           display: 'inline-block',
           paddingBottom: '8px',
           minWidth: '350px',
-          letterSpacing: '0.02em'
+          letterSpacing: '0.02em',
         }}>
           {certificateData?.studentName || '<Student Name>'}
         </div>
@@ -296,20 +300,22 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}>
           has successfully completed online training on<br/>
           <span style={{
-            fontWeight: '700',
+            fontFamily: "'Roboto Slab', 'Merriweather', serif",
+            fontWeight: '600',
             color: '#7a6fff',
-            fontSize: '1.3rem',
+            fontSize: '1.4rem',
             letterSpacing: '0.5px',
-            textTransform: 'capitalize'
+            textTransform: 'capitalize',
           }}>
             {certificateData?.categoryName || certificateData?.courseId?.category?.name || 'General'}
           </span><br/>
           and real-time project training on<br/>
           <span style={{
-            fontWeight: '700',
+            fontFamily: "'Roboto Slab', 'Merriweather', serif",
+            fontWeight: '600',
             color: '#7a6fff',
-            fontSize: '1.3rem',
-            letterSpacing: '0.5px'
+            fontSize: '1.4rem',
+            letterSpacing: '0.5px',
           }}>
             {certificateData?.courseName || certificateData?.courseId?.courseName || 'Course Name'}
           </span>
@@ -424,10 +430,12 @@ export default function CleanInternshipCertificate({ certificateData }) {
             marginBottom: '6px'
           }}></div>
           <div style={{
-            fontWeight: '700',
-            fontSize: '1rem',
+            fontFamily: "'Oswald', 'Roboto Condensed', sans-serif",
+            fontWeight: '500',
+            fontSize: '1.1rem',
             color: '#333',
-            letterSpacing: '0.3px'
+            letterSpacing: '0.8px',
+            textTransform: 'uppercase'
           }}>
             JOSHWA
           </div>

@@ -71,12 +71,14 @@ export default function EnrolledCourses() {
         token
       )
       if (certificateData) {
+        console.log("Certificate data received:", certificateData); // Debug log
         setSelectedCourse({
           courseName: certificateData.courseName || course.courseName,
           categoryName: certificateData.categoryName,
           studentName: certificateData.studentName || `${user?.firstName} ${user?.lastName}`,
           email: certificateData.email || user?.email,
-          completionDate: certificateData.completionDate || new Date().toISOString(),
+          completionDate: certificateData.completionDate, // Remove fallback to ensure backend date is used
+          issuedDate: certificateData.issuedDate, // Add issued date
           certificateId: certificateData.certificateId
         })
         setShowCertificate(true)
