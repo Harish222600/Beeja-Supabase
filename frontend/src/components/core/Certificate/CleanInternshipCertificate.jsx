@@ -160,8 +160,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
             alt="Beeja Academy Logo" 
             style={{
               width: '64px',
-              height: '64px',
-              borderRadius: '50%',
+              height: '70px',
               objectFit: 'cover'
             }}
           />
@@ -215,6 +214,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
       <div style={{
         textAlign: 'center',
         marginBottom: '0px',
+        marginTop: '-15px',
         padding: '0 40px'
       }}>
         <div style={{
