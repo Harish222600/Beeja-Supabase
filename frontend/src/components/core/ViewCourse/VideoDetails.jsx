@@ -79,7 +79,7 @@ const PlaybackSpeedControl = ({ playerRef, playbackRate, setPlaybackRate }) => {
             border: "1px solid rgba(255, 255, 255, 0.2)"
           }}
         >
-          {[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((speed) => (
+          {[0.5, 0.75, 1, 1.5, 2].map((speed) => (
             <div
               key={speed}
               style={{
