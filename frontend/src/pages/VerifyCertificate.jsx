@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { verifyCertificate } from '../services/operations/certificateAPI';
-import CourseCertificate from '../components/core/Certificate/CourseCertificate';
+import CleanInternshipCertificate from '../components/core/Certificate/CleanInternshipCertificate';
 import QuickLinks from '../components/common/QuickLinks';
 import { formatDate } from '../utils/dateFormatter';
 
@@ -138,8 +138,8 @@ export default function VerifyCertificate() {
 
         {/* Certificate Display */}
         {showCertificate && certificateData && (
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-6">
+          <div className="w-full flex flex-col items-center">
+            <div className="mb-6 w-full max-w-6xl">
               <button
                 onClick={() => setShowCertificate(false)}
                 className="text-richblack-300 hover:text-yellow-50 transition-colors duration-200"
@@ -147,8 +147,8 @@ export default function VerifyCertificate() {
                 ← Back to Details
               </button>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <CourseCertificate certificateData={certificateData} />
+            <div className="bg-white rounded-lg shadow-lg p-8 flex justify-center items-center" style={{ minWidth: '1100px', minHeight: '800px' }}>
+              <CleanInternshipCertificate certificateData={certificateData} />
             </div>
           </div>
         )}

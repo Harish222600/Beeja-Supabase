@@ -20,6 +20,10 @@ const certificateSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  categoryName: {
+    type: String,
+    default: 'General',
+  },
   studentName: {
     type: String,
     required: true,

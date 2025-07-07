@@ -10,8 +10,8 @@ exports.generateCertificate = async (req, res) => {
     const { courseId } = req.body;
     const userId = req.user.id;
 
-    // Check if course exists
-    const course = await Course.findById(courseId);
+    // Check if course exists and populate category
+    const course = await Course.findById(courseId).populate('category', 'name');
     
     // Check if user has access to this course
     // First check if user is enrolled in the course
@@ -173,6 +173,7 @@ exports.generateCertificate = async (req, res) => {
         courseId,
         userId,
         courseName: course.courseName,
+        categoryName: course.category?.name || 'General',
         studentName: `${user.firstName} ${user.lastName}`,
         email: user.email,
         completionDate: new Date(),
@@ -184,6 +185,7 @@ exports.generateCertificate = async (req, res) => {
       // and the student completed it again
       certificate.issuedDate = new Date();
       certificate.completionDate = new Date();
+      certificate.categoryName = course.category?.name || 'General';
       await certificate.save();
       
       console.log(`Certificate updated for student: ${user.firstName} ${user.lastName}, Course: ${course.courseName}, New Issue Date: ${certificate.issuedDate}`);
@@ -210,7 +212,14 @@ exports.verifyCertificate = async (req, res) => {
     const { certificateId } = req.params;
 
     const certificate = await Certificate.findOne({ certificateId })
-      .populate("courseId", "courseName")
+      .populate({
+        path: "courseId",
+        select: "courseName category",
+        populate: {
+          path: "category",
+          select: "name"
+        }
+      })
       .populate("userId", "firstName lastName email");
 
     if (!certificate) {
@@ -241,7 +250,14 @@ exports.getUserCertificates = async (req, res) => {
     const userId = req.user.id;
 
     const certificates = await Certificate.find({ userId })
-      .populate("courseId", "courseName thumbnail")
+      .populate({
+        path: "courseId",
+        select: "courseName thumbnail category",
+        populate: {
+          path: "category",
+          select: "name"
+        }
+      })
       .sort({ createdAt: -1 });
 
     return res.status(200).json({

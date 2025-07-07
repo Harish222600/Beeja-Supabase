@@ -72,9 +72,10 @@ export default function EnrolledCourses() {
       )
       if (certificateData) {
         setSelectedCourse({
-          courseName: course.courseName,
-          studentName: `${user?.firstName} ${user?.lastName}`,
-          email: user?.email,
+          courseName: certificateData.courseName || course.courseName,
+          categoryName: certificateData.categoryName,
+          studentName: certificateData.studentName || `${user?.firstName} ${user?.lastName}`,
+          email: certificateData.email || user?.email,
           completionDate: certificateData.completionDate || new Date().toISOString(),
           certificateId: certificateData.certificateId
         })

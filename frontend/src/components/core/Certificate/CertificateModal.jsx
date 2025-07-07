@@ -8,16 +8,33 @@ export default function CertificateModal({ onClose, certificateData }) {
 
   const handleDownload = useReactToPrint({
     contentRef: certificateRef,
-    documentTitle: `${certificateData?.courseName}_Internship_Certificate`,
+    documentTitle: `${certificateData?.courseName}_Enhanced_Certificate`,
     pageStyle: `
       @page {
         size: A4 landscape;
         margin: 0;
       }
       @media print {
-        body {
+        html, body {
           margin: 0;
           padding: 0;
+          background: white;
+          height: 100vh;
+          width: 100vw;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        body > div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+        }
+        * {
+          -webkit-print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
       }
     `

@@ -21,124 +21,379 @@ export default function CleanInternshipCertificate({ certificateData }) {
     generateQR();
   }, [certificateData?.certificateId]);
 
+  const certificateStyle = {
+    fontFamily: "'Inter', sans-serif",
+    width: '1000px',
+    height: '700px',
+    margin: '0 auto',
+    position: 'relative',
+    padding: '60px 80px',
+    boxSizing: 'border-box',
+    background: 'white',
+    border: '4px solid #7ee8fa',
+    boxShadow: '0 0 0 4px #7ee8fa inset',
+    color: '#222222'
+  };
+
+  const cornerStyle = {
+    position: 'absolute',
+    width: '40px',
+    height: '40px',
+    border: '3px solid #7ee8fa'
+  };
+
   return (
-    <div 
-      className="relative bg-gradient-to-br from-blue-600 to-blue-800 p-8"
-      style={{ width: '842px', height: '595px', margin: '0 auto' }}
-    >
-      {/* Outer Border */}
-      <div className="absolute inset-1 border-2 border-white"></div>
-      
-      {/* Inner Border */}
-      <div className="absolute inset-8 border-2 border-white"></div>
-      
-      {/* Main Certificate Content */}
-      <div className="relative bg-white h-full mx-6 my-6 p-8 flex flex-col">
+    <div style={certificateStyle} role="main" aria-label="Enhanced Certificate from Beeja Academy">
+      {/* Decorative corners */}
+      <div 
+        style={{
+          ...cornerStyle,
+          top: '10px',
+          left: '10px',
+          borderRight: 'none',
+          borderBottom: 'none'
+        }}
+      >
+        <div style={{
+          content: '""',
+          position: 'absolute',
+          top: '12px',
+          left: '12px',
+          width: '16px',
+          height: '16px',
+          border: '2px solid #7ee8fa',
+          borderLeft: 'none',
+          borderTop: 'none'
+        }}></div>
+      </div>
+
+      <div 
+        style={{
+          ...cornerStyle,
+          top: '10px',
+          right: '10px',
+          borderLeft: 'none',
+          borderBottom: 'none'
+        }}
+      >
+        <div style={{
+          content: '""',
+          position: 'absolute',
+          top: '12px',
+          right: '12px',
+          width: '16px',
+          height: '16px',
+          border: '2px solid #7ee8fa',
+          borderRight: 'none',
+          borderTop: 'none'
+        }}></div>
+      </div>
+
+      <div 
+        style={{
+          ...cornerStyle,
+          bottom: '10px',
+          left: '10px',
+          borderRight: 'none',
+          borderTop: 'none'
+        }}
+      >
+        <div style={{
+          content: '""',
+          position: 'absolute',
+          bottom: '12px',
+          left: '12px',
+          width: '16px',
+          height: '16px',
+          border: '2px solid #7ee8fa',
+          borderLeft: 'none',
+          borderBottom: 'none'
+        }}></div>
+      </div>
+
+      <div 
+        style={{
+          ...cornerStyle,
+          bottom: '10px',
+          right: '10px',
+          borderLeft: 'none',
+          borderTop: 'none'
+        }}
+      >
+        <div style={{
+          content: '""',
+          position: 'absolute',
+          bottom: '12px',
+          right: '12px',
+          width: '16px',
+          height: '16px',
+          border: '2px solid #7ee8fa',
+          borderRight: 'none',
+          borderBottom: 'none'
+        }}></div>
+      </div>
+
+      {/* Header */}
+      <header style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '30px'
+      }}>
+        {/* Certificate ID */}
+        <div style={{
+          fontSize: '0.9rem',
+          color: '#666',
+          fontWeight: '500'
+        }}>
+          Certificate ID: {certificateData?.certificateId || 'BA-25FJ2849'}
+        </div>
+
+        {/* Logo and Academy Name */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <img 
+            src="/beejalogo.png" 
+            alt="Beeja Academy Logo" 
+            style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              objectFit: 'cover'
+            }}
+          />
+          <div style={{
+            fontWeight: '700',
+            fontSize: '1.5rem',
+            color: '#111827',
+            userSelect: 'none'
+          }}>
+            Beeja Academy
+          </div>
+        </div>
+
+        {/* Issue Date - Top Right */}
+        <div style={{
+          fontSize: '0.9rem',
+          color: '#666',
+          fontWeight: '500',
+          textAlign: 'right'
+        }}>
+          Issued on: {formatDate(certificateData?.completionDate) || 'July 7, 2025'}
+        </div>
+      </header>
+
+      {/* Title */}
+      <h1 style={{
+        textAlign: 'center',
+        fontWeight: '900',
+        fontSize: '2.5rem',
+        letterSpacing: '0.15em',
+        marginBottom: '12px',
+        color: '#222222',
+        userSelect: 'none'
+      }}>
+        CERTIFICATE
+      </h1>
+
+      {/* Dots */}
+      <div style={{
+        textAlign: 'center',
+        color: '#7ee8fa',
+        fontSize: '1.5rem',
+        letterSpacing: '0.5em',
+        marginBottom: '30px',
+        userSelect: 'none'
+      }}>
+        •••••
+      </div>
+
+      {/* Content */}
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '0px',
+        padding: '0 40px'
+      }}>
+        <div style={{
+          fontSize: '1.1rem',
+          fontWeight: '600',
+          color: '#333',
+          marginBottom: '25px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase'
+        }}>
+          THIS CERTIFICATE IS PRESENTED TO
+        </div>
+
+        <div style={{
+          fontSize: '2.2rem',
+          fontWeight: '700',
+          color: '#7a6fff',
+          marginBottom: '30px',
+          borderBottom: '3px solid #7ee8fa',
+          display: 'inline-block',
+          paddingBottom: '8px',
+          minWidth: '350px',
+          letterSpacing: '0.02em'
+        }}>
+          {certificateData?.studentName || '<Student Name>'}
+        </div>
         
-        {/* Header with Logo */}
-        <div className="flex justify-between items-start mb-6">
-          <div className="text-sm text-gray-600">
-            C.ID: {certificateData?.certificateId || 'BEEJA-175035933086-165'}
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Beeja Academy Logo */}
-            <div className="w-12 h-12 relative">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center relative overflow-hidden">
-                {/* Leaf elements */}
-                <div className="absolute top-0 left-2 w-2 h-3 bg-cyan-300 rounded-full transform rotate-12"></div>
-                <div className="absolute top-0 left-3 w-1 h-2 bg-cyan-200 rounded-full transform rotate-45"></div>
-                <div className="absolute top-0 left-4 w-1 h-2 bg-cyan-200 rounded-full transform -rotate-12"></div>
-                {/* Main spiral */}
-                <div className="w-7 h-7 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                  <div className="w-4 h-4 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="text-right">
-              <h1 className="text-lg font-bold text-gray-800">Beeja Academy</h1>
-              <p className="text-xs text-gray-500">LEARNING PLATFORM</p>
-            </div>
-          </div>
+        <div style={{
+          fontSize: '1.1rem',
+          lineHeight: '1.8',
+          color: '#444',
+          marginBottom: '20px',
+          maxWidth: '600px',
+          margin: '0 auto'
+        }}>
+          has successfully completed online training on<br/>
+          <span style={{
+            fontWeight: '700',
+            color: '#7a6fff',
+            fontSize: '1.3rem',
+            letterSpacing: '0.5px',
+            textTransform: 'capitalize'
+          }}>
+            {certificateData?.categoryName || certificateData?.courseId?.category?.name || 'General'}
+          </span><br/>
+          and real-time project training on<br/>
+          <span style={{
+            fontWeight: '700',
+            color: '#7a6fff',
+            fontSize: '1.3rem',
+            letterSpacing: '0.5px'
+          }}>
+            {certificateData?.courseName || certificateData?.courseId?.courseName || 'Course Name'}
+          </span>
         </div>
+      </div>
 
-        {/* Certificate Title */}
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-blue-700 mb-2" style={{ fontFamily: 'serif' }}>
-            Beeja Academy Certificate of Completion
-          </h2>
-        </div>
-
-        {/* Certificate Body */}
-        <div className="flex-1 flex flex-col justify-center space-y-6">
-          
-          {/* Student Name */}
-          <div className="text-center">
-            <div className="border-b-2 border-gray-400 pb-2 mx-auto" style={{ width: '400px' }}>
-              <span className="text-2xl font-bold text-gray-800">
-                {certificateData?.studentName || 'Student Name'}
-              </span>
-            </div>
-          </div>
-
-          {/* Has Earned Section */}
-          <div className="text-center space-y-2">
-            <p className="text-xl italic" style={{ fontFamily: 'cursive' }}>has earned</p>
-            <p className="text-lg font-bold">Course Completion Certificate</p>
-          </div>
-
-          {/* Course Title Section */}
-          <div className="text-center space-y-2">
-            <p className="text-lg italic" style={{ fontFamily: 'cursive' }}>
-              while completing the Course program entitled
-            </p>
-          </div>
-
-          {/* Course Name */}
-          <div className="text-center">
-            <div className="border-b-2 border-gray-400 pb-2 mx-auto" style={{ width: '500px' }}>
-              <span className="text-lg font-bold">
-                {certificateData?.courseName || 'Web Development Internship Program'}
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-between items-end mt-8">
-          
-          {/* Left Side - Institution */}
-          <div className="text-center" style={{ width: '200px' }}>
-            <p className="text-sm mb-2">Beeja Academy</p>
-            <div className="border-b border-gray-400 mb-2 h-8"></div>
-            <p className="text-xs font-bold">Learning Institution</p>
-          </div>
-
-          {/* Center - QR Code */}
-          <div className="flex flex-col items-center">
-            {qrCodeUrl && (
-              <div className="mb-2">
-                <img src={qrCodeUrl} alt="Certificate QR Code" className="w-16 h-16 border border-gray-300" />
-                <p className="text-xs text-gray-500 mt-1 text-center">Verify Online</p>
+      {/* Bottom Section */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        marginTop: '-50px',
+        position: 'relative',
+        paddingBottom: '0px',
+        maxWidth: '100%',
+        padding: '0 20px'
+      }}>
+        {/* QR Section */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '6px',
+          width: '120px'
+        }}>
+          <div style={{
+            width: '70px',
+            height: '70px',
+            background: '#333',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '8px',
+            textAlign: 'center',
+            borderRadius: '6px',
+            border: '2px solid #7ee8fa'
+          }}>
+            {qrCodeUrl ? (
+              <img src={qrCodeUrl} alt="Certificate QR Code" style={{ width: '100%', height: '100%', borderRadius: '4px' }} />
+            ) : (
+              <div>
+                ████████<br/>
+                █&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;█<br/>
+                █&nbsp;████&nbsp;█<br/>
+                █&nbsp;████&nbsp;█<br/>
+                █&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;█<br/>
+                ████████
               </div>
             )}
           </div>
-
-          {/* Right Side - Date */}
-          <div className="text-center" style={{ width: '200px' }}>
-            <p className="text-sm mb-2">Date Completed</p>
-            <div className="border-b border-gray-400 mb-2 h-8 flex items-end justify-center">
-              <span className="text-sm">
-                {formatDate(certificateData?.completionDate) || 'June 20, 2025'}
-              </span>
-            </div>
-            <p className="text-xs font-bold">Completion Date</p>
+          <div style={{
+            fontSize: '0.7rem',
+            color: '#666',
+            textAlign: 'center',
+            whiteSpace: 'nowrap'
+          }}>
+            Scan to Verify
           </div>
-
         </div>
 
+        {/* Center - Website and Email */}
+        <div style={{
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '6px',
+          flex: '1',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            color: '#7a6fff',
+            letterSpacing: '0.3px'
+          }}>
+            www.beejaacademy.com
+          </div>
+          <div style={{
+            fontSize: '0.8rem',
+            color: '#666',
+            fontWeight: '500'
+          }}>
+            info@beejaacademy.com
+          </div>
+        </div>
+
+        {/* Signature Section */}
+        <div style={{
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '6px',
+          width: '120px'
+        }}>
+          <img 
+            src="/src/assets/Certificate/Director-sign-certificate.png" 
+            alt="Director Signature" 
+            style={{
+              width: '120px',
+              height: '60px',
+              objectFit: 'contain',
+              marginBottom: '6px'
+            }}
+          />
+          <div style={{
+            width: '140px',
+            height: '2px',
+            background: 'linear-gradient(90deg, #7ee8fa, #7a6fff)',
+            marginBottom: '6px'
+          }}></div>
+          <div style={{
+            fontWeight: '700',
+            fontSize: '1rem',
+            color: '#333',
+            letterSpacing: '0.3px'
+          }}>
+            JOSHWA
+          </div>
+          <div style={{
+            fontSize: '0.8rem',
+            color: '#666',
+            fontWeight: '500'
+          }}>
+            Director
+          </div>
+        </div>
       </div>
     </div>
   );
