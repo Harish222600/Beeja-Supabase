@@ -34,6 +34,8 @@ const userAnalyticsRoutes = require('./routes/userAnalytics');
 const chatRoutes = require('./routes/chat');
 const jobRoutes = require('./routes/jobs');
 const jobApplicationRoutes = require('./routes/jobApplications');
+const chunkedUploadRoutes = require('./routes/chunkedUpload');
+const videoPlaybackRoutes = require('./routes/videoPlayback');
 
 // middleware 
 app.use(cookieParser());
@@ -242,6 +244,10 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/jobs', jobRoutes);
 // Job Application Routes
 app.use('/api/v1/job-applications', jobApplicationRoutes);
+// Chunked Upload Routes
+app.use('/api/v1/chunked-upload', chunkedUploadRoutes);
+// Video Playback Routes
+app.use('/api/v1/video', videoPlaybackRoutes);
 
 // Default Route
 app.get('/', (req, res) => {
