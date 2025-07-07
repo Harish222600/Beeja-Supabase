@@ -44,7 +44,44 @@ export default function CleanInternshipCertificate({ certificateData }) {
 
   return (
     <div style={certificateStyle} role="main" aria-label="Enhanced Certificate from Beeja Academy">
-      {/* Decorative corners */}
+      {/* Watermark */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        opacity: '0.10',
+        zIndex: '1',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '12px',
+        pointerEvents: 'none'
+      }}>
+        <img 
+          src="/beejalogo.png" 
+          alt="Beeja Academy Watermark" 
+          style={{
+            width: '200px',
+            height: '200px',
+            objectFit: 'contain'
+          }}
+        />
+        <div style={{
+          fontWeight: '700',
+          fontSize: '3rem',
+          color: '#111827',
+          userSelect: 'none',
+          textAlign: 'center',
+          letterSpacing: '0.1em'
+        }}>
+          Beeja Academy
+        </div>
+      </div>
+
+      {/* Decorative corners - All corners with consistent L-shaped pattern */}
+      
+      {/* Top Left Corner */}
       <div 
         style={{
           ...cornerStyle,
@@ -55,7 +92,6 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}
       >
         <div style={{
-          content: '""',
           position: 'absolute',
           top: '12px',
           left: '12px',
@@ -67,6 +103,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}></div>
       </div>
 
+      {/* Top Right Corner */}
       <div 
         style={{
           ...cornerStyle,
@@ -77,7 +114,6 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}
       >
         <div style={{
-          content: '""',
           position: 'absolute',
           top: '12px',
           right: '12px',
@@ -89,6 +125,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}></div>
       </div>
 
+      {/* Bottom Left Corner */}
       <div 
         style={{
           ...cornerStyle,
@@ -99,7 +136,6 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}
       >
         <div style={{
-          content: '""',
           position: 'absolute',
           bottom: '12px',
           left: '12px',
@@ -111,6 +147,7 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}></div>
       </div>
 
+      {/* Bottom Right Corner */}
       <div 
         style={{
           ...cornerStyle,
@@ -121,7 +158,6 @@ export default function CleanInternshipCertificate({ certificateData }) {
         }}
       >
         <div style={{
-          content: '""',
           position: 'absolute',
           bottom: '12px',
           right: '12px',
@@ -138,7 +174,9 @@ export default function CleanInternshipCertificate({ certificateData }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: '30px'
+        marginBottom: '30px',
+        position: 'relative',
+        zIndex: '2'
       }}>
         {/* Certificate ID */}
         <div style={{
@@ -193,7 +231,9 @@ export default function CleanInternshipCertificate({ certificateData }) {
         letterSpacing: '0.15em',
         marginBottom: '12px',
         color: '#222222',
-        userSelect: 'none'
+        userSelect: 'none',
+        position: 'relative',
+        zIndex: '2'
       }}>
         CERTIFICATE
       </h1>
@@ -205,7 +245,9 @@ export default function CleanInternshipCertificate({ certificateData }) {
         fontSize: '1.5rem',
         letterSpacing: '0.5em',
         marginBottom: '30px',
-        userSelect: 'none'
+        userSelect: 'none',
+        position: 'relative',
+        zIndex: '2'
       }}>
         •••••
       </div>
@@ -215,7 +257,9 @@ export default function CleanInternshipCertificate({ certificateData }) {
         textAlign: 'center',
         marginBottom: '0px',
         marginTop: '-15px',
-        padding: '0 40px'
+        padding: '0 40px',
+        position: 'relative',
+        zIndex: '2'
       }}>
         <div style={{
           fontSize: '1.1rem',
@@ -280,7 +324,8 @@ export default function CleanInternshipCertificate({ certificateData }) {
         position: 'relative',
         paddingBottom: '0px',
         maxWidth: '100%',
-        padding: '0 20px'
+        padding: '0 20px',
+        zIndex: '2'
       }}>
         {/* QR Section */}
         <div style={{
