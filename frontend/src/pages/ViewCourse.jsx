@@ -55,6 +55,14 @@ export default function ViewCourse() {
       const courseData = await getFullDetailsOfCourse(courseId, token)
       
       if (courseData?.courseDetails) {
+        // Check if course is deleted/deactivated or order is inactive
+        if (courseData.courseDetails.isDeactivated || courseData.courseDetails.isOrderInactive) {
+          console.error("Course access is restricted")
+          resetCourseState()
+          navigate('/dashboard/enrolled-courses')
+          return
+        }
+
         const totalLectures = calculateTotalLectures(courseData.courseDetails.courseContent)
         
         // Batch dispatch to reduce re-renders

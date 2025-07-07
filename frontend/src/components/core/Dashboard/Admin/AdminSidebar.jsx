@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { FaUsers, FaBookOpen, FaChartBar, FaGraduationCap, FaQuestionCircle, FaStar, FaComments, FaTag, FaChartLine, FaCommentDots, FaBriefcase, FaEnvelope } from 'react-icons/fa';
+import { FaUsers, FaBookOpen, FaChartBar, FaGraduationCap, FaQuestionCircle, FaStar, FaComments, FaTag, FaChartLine, FaCommentDots, FaBriefcase, FaEnvelope, FaTrash } from 'react-icons/fa';
 import { MdSettings, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { FiBell } from 'react-icons/fi';
 import { VscSignOut, VscPackage, VscGitPullRequestCreate, VscSymbolClass } from "react-icons/vsc";
@@ -37,6 +37,7 @@ const AdminSidebar = ({ activeTab, onTabChange }) => {
     { id: 'contactMessages', label: 'Contact Messages', icon: <FaEnvelope size={16} /> },
     { id: 'faqs', label: 'FAQ Management', icon: <FaComments size={16} /> },
     { id: 'chats', label: 'Manage Chats', icon: <FaCommentDots size={16} /> },
+    { id: 'recycleBin', label: 'Recycle Bin', icon: <FaTrash size={16} /> },
   ];
 
   useEffect(() => {

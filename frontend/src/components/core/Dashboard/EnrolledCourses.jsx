@@ -51,6 +51,11 @@ export default function EnrolledCourses() {
 
   // Memoized navigation handler
   const handleCourseNavigation = useCallback((course) => {
+    // Don't navigate if course is deleted/deactivated or order is inactive
+    if (course.isDeactivated || course.isOrderInactive) {
+      return; // Just return without any action or toast
+    }
+    
     const firstSection = course.courseContent?.[0];
     const firstSubSection = firstSection?.subSection?.[0];
     if (firstSection && firstSubSection) {
@@ -127,14 +132,34 @@ export default function EnrolledCourses() {
         {enrolledCourses?.map((course, i) => (
           <div
             key={i}
-            className={`group bg-slate-800/50 backdrop-blur-xl rounded-2xl border transition-all duration-300 ${
-              course.isDeactivated 
-                ? 'border-red-500/50 hover:border-red-500/70' 
-                : 'border-slate-700/50 hover:border-purple-500/30'
-            }`}
+          className={`group bg-slate-800/50 backdrop-blur-xl rounded-2xl border transition-all duration-300 ${
+            course.isDeactivated 
+              ? 'border-red-500/50 hover:border-red-500/70' 
+              : course.isOrderInactive
+              ? 'border-red-500/50 hover:border-red-500/70'
+              : 'border-slate-700/50 hover:border-purple-500/30'
+          }`}
           >
-            {/* Deactivation Warning Banner */}
+            {/* Course Status Warning Banners */}
             {course.isDeactivated && (
+              <div className="bg-red-500/10 border-b border-red-500/20 p-4 rounded-t-2xl">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <svg className="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-red-400 font-semibold text-sm">Course Deleted by Admin</h4>
+                    <p className="text-red-300/80 text-xs mt-1">
+                      This course has been deleted by the administrator and moved to recycle bin. You cannot continue learning until the course is restored. Please contact the administrator for more information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {course.isOrderInactive && (
               <div className="bg-red-500/10 border-b border-red-500/20 p-4 rounded-t-2xl">
                 <div className="flex items-center gap-3">
                   <div className="flex-shrink-0">
@@ -143,9 +168,9 @@ export default function EnrolledCourses() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-red-400 font-semibold text-sm">Course Deactivated</h4>
-                    <p className="text-red-300/80 text-xs mt-1">
-                      This course has been deactivated by the admin. Please contact the administrator for further information.
+                    <h4 className="text-red-400 font-semibold text-sm">Course Access Suspended</h4>
+                    <p className="text-red-300 text-xs mt-1">
+                      Your access to this course has been temporarily suspended by the administrator. Please contact support to resolve any payment or enrollment issues.
                     </p>
                   </div>
                 </div>
@@ -156,8 +181,8 @@ export default function EnrolledCourses() {
               <div className="flex flex-col sm:flex-row gap-6">
                 {/* Thumbnail */}
                 <div 
-                  className={`relative ${course.isDeactivated ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
-                  onClick={() => !course.isDeactivated && handleCourseNavigation(course)}
+                  className={`relative ${(course.isDeactivated || course.isOrderInactive) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+                  onClick={() => handleCourseNavigation(course)}
                 >
                   <div className="relative">
                     <Img
@@ -170,7 +195,14 @@ export default function EnrolledCourses() {
                     {course.isDeactivated && (
                       <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
                         <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </div>
+                    )}
+                    {course.isOrderInactive && (
+                      <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                        <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                         </svg>
                       </div>
                     )}
@@ -181,11 +213,11 @@ export default function EnrolledCourses() {
                 <div className="flex-1 min-w-0">
                   <h3 
                     className={`text-lg font-semibold mb-2 transition-colors duration-200 ${
-                      course.isDeactivated 
+                      (course.isDeactivated || course.isOrderInactive)
                         ? 'text-slate-400 cursor-not-allowed' 
                         : 'text-white cursor-pointer hover:text-purple-400'
                     }`}
-                    onClick={() => !course.isDeactivated && handleCourseNavigation(course)}
+                    onClick={() => handleCourseNavigation(course)}
                   >
                     {course.courseName}
                   </h3>
@@ -203,7 +235,9 @@ export default function EnrolledCourses() {
                         <span className="text-sm">{course?.totalDuration}</span>
                       </div>
                       <span className={`text-sm font-medium ${
-                        course.isDeactivated ? 'text-slate-500' : 'text-purple-400'
+                        course.isDeactivated ? 'text-slate-500' 
+                        : course.isOrderInactive ? 'text-red-400'
+                        : 'text-purple-400'
                       }`}>
                         {course.progressPercentage || 0}% Complete
                       </span>
@@ -212,7 +246,11 @@ export default function EnrolledCourses() {
                       completed={course.progressPercentage || 0}
                       height="8px"
                       isLabelVisible={false}
-                      bgColor={course.isDeactivated ? "#6B7280" : "linear-gradient(90deg, #8B5CF6, #3B82F6)"}
+                      bgColor={
+                        course.isDeactivated ? "#6B7280" 
+                        : course.isOrderInactive ? "#EF4444"
+                        : "linear-gradient(90deg, #8B5CF6, #3B82F6)"
+                      }
                       baseBgColor="#1F2937"
                       className="rounded-full"
                     />
@@ -220,23 +258,25 @@ export default function EnrolledCourses() {
 
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
-                    {course.isDeactivated ? (
-                      <button
-                        disabled
-                        className="px-4 py-2 bg-slate-600/20 text-slate-500 rounded-xl cursor-not-allowed text-sm font-medium"
-                      >
-                        Course Unavailable
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleCourseNavigation(course)}
-                        className="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-xl hover:bg-purple-500/20 transition-colors duration-200 text-sm font-medium"
-                      >
-                        Continue Learning
-                      </button>
-                    )}
+                    <button
+                      onClick={() => handleCourseNavigation(course)}
+                      disabled={course.isDeactivated || course.isOrderInactive}
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors duration-200 ${
+                        course.isDeactivated 
+                          ? 'bg-slate-600/20 text-slate-500 cursor-not-allowed' 
+                          : course.isOrderInactive
+                          ? 'bg-red-600/20 text-red-500 cursor-not-allowed'
+                          : 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20'
+                      }`}
+                    >
+                      {course.isDeactivated 
+                        ? 'Course Deleted - Cannot Continue' 
+                        : course.isOrderInactive
+                        ? 'Access Suspended - Contact Support'
+                        : 'Continue Learning'}
+                    </button>
                     
-                    {course.progressPercentage === 100 && !course.isDeactivated && (
+                    {course.progressPercentage === 100 && !course.isDeactivated && !course.isOrderInactive && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation()

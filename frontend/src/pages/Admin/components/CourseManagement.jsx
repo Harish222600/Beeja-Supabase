@@ -1,11 +1,13 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { getAllCourses, approveCourse, deleteCourse, toggleCourseVisibility, setCourseType } from "../../../services/operations/adminAPI";
+import { moveToRecycleBin } from "../../../services/operations/recycleBinAPI";
 import { getFullDetailsOfCourse } from "../../../services/operations/courseDetailsAPI";
 import { FaCheck, FaTrash, FaEye, FaEyeSlash, FaPlus, FaEdit, FaSearch, FaTimes, FaDollarSign, FaTag } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import CreateCourse from "./CreateCourse/CreateCourse";
 import EditCourse from "./EditCourse";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 
 const CourseManagement = () => {
   const [showCreateCourse, setShowCreateCourse] = useState(false);
@@ -16,6 +18,7 @@ const CourseManagement = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [confirmationModal, setConfirmationModal] = useState(null);
 
   // Optimized fetch courses with caching and debouncing
   const fetchCourses = useCallback(async () => {
@@ -69,7 +72,18 @@ const CourseManagement = () => {
   const [togglingCourseId, setTogglingCourseId] = useState(null);
   const [processingId, setProcessingId] = useState(null);
 
-  const handleDeleteCourse = useCallback(async (courseId) => {
+  const handleDeleteCourse = useCallback((course) => {
+    setConfirmationModal({
+      text1: "Move Course to Recycle Bin?",
+      text2: `Are you sure you want to move the course "${course.courseName}" to recycle bin? It will be automatically deleted after 30 days, but you can restore it anytime before that.`,
+      btn1Text: "Move to Recycle Bin",
+      btn2Text: "Cancel",
+      btn1Handler: () => confirmDeleteCourse(course._id, course.courseName),
+      btn2Handler: () => setConfirmationModal(null),
+    });
+  }, []);
+
+  const confirmDeleteCourse = useCallback(async (courseId, courseName) => {
     if (!token) {
       return;
     }
@@ -77,18 +91,19 @@ const CourseManagement = () => {
     try {
       setDeletingCourseId(courseId);
       setError(null);
+      setConfirmationModal(null);
       
-      const result = await deleteCourse(courseId, token);
+      const result = await moveToRecycleBin(token, 'Course', courseId, `Course moved to recycle bin by admin`);
       
       if (result) {
-        toast.success("Course deleted successfully");
+        toast.success("Course moved to recycle bin successfully");
         // Optimistic update - remove from local state immediately
         setCourses(prevCourses => prevCourses.filter(course => course._id !== courseId));
       }
       
     } catch (error) {
-      console.error('Delete operation failed:', error);
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to delete course';
+      console.error('Move to recycle bin operation failed:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to move course to recycle bin';
       toast.error(errorMessage);
     } finally {
       setDeletingCourseId(null);
@@ -423,17 +438,17 @@ const CourseManagement = () => {
                             <span className="text-xs font-medium">Edit</span>
                           </button>
                           <button
-                            onClick={() => handleDeleteCourse(course._id)}
+                            onClick={() => handleDeleteCourse(course)}
                             disabled={deletingCourseId === course._id}
                             className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors disabled:opacity-50"
-                            title="Delete Course"
+                            title="Move to Recycle Bin"
                           >
                             {deletingCourseId === course._id ? (
                               <div className="w-4 h-4 animate-spin rounded-full border-b-2 border-current"/>
                             ) : (
                               <>
                                 <FaTrash size={16} />
-                                <span className="text-xs font-medium">Delete</span>
+                            <span className="text-xs font-medium">Move to Bin</span>
                               </>
                             )}
                           </button>
@@ -554,17 +569,17 @@ const CourseManagement = () => {
                       </button>
                       
                       <button
-                        onClick={() => handleDeleteCourse(course._id)}
+                        onClick={() => handleDeleteCourse(course)}
                         disabled={deletingCourseId === course._id}
                         className="flex items-center justify-center gap-2 px-4 py-3 bg-red-500/15 text-red-400 hover:bg-red-500/25 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-                        title="Delete Course"
+                        title="Move to Recycle Bin"
                       >
                         {deletingCourseId === course._id ? (
                           <div className="w-4 h-4 animate-spin rounded-full border-b-2 border-current"/>
                         ) : (
                           <>
                             <FaTrash size={16} />
-                            <span>Delete</span>
+                            <span>Move to Bin</span>
                           </>
                         )}
                       </button>
@@ -575,6 +590,14 @@ const CourseManagement = () => {
             )}
           </div>
         </>
+      )}
+      
+      {/* Confirmation Modal */}
+      {confirmationModal && (
+        <ConfirmationModal
+          modalData={confirmationModal}
+          closeModal={() => setConfirmationModal(null)}
+        />
       )}
     </div>
   );

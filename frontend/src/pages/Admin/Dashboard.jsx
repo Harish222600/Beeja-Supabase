@@ -26,6 +26,7 @@ const ContactMessages = lazy(() => import('../../components/core/Dashboard/Admin
 const FaqManagement = lazy(() => import('./components/FaqManagement'));
 const AdminChats = lazy(() => import('../Dashboard/AdminChats'));
 const CareersManagement = lazy(() => import('./components/CareersManagement'));
+const RecycleBin = lazy(() => import('./components/RecycleBin'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
     { id: 'users', label: 'User Management', icon: <FaUsers className="w-5 h-5" /> },
     { id: 'courses', label: 'Course Management', icon: <FaBookOpen className="w-5 h-5" /> },
     { id: 'categories', label: 'Course Categories', icon: <FaGraduationCap className="w-5 h-5" /> },
+    { id: 'recycleBin', label: 'Recycle Bin', icon: <FaUsers className="w-5 h-5" /> },
     { id: 'studentProgress', label: 'Student Progress', icon: <FaChartLine className="w-5 h-5" /> },
     { id: 'quizzes', label: 'Quiz Management', icon: <FaQuestionCircle className="w-5 h-5" /> },
     { id: 'featuredCourses', label: 'Featured Courses Management', icon: <FaUsers className="w-5 h-5" /> },
@@ -120,6 +122,7 @@ const AdminDashboard = () => {
                     {activeTab === 'faqs' && <FaqManagement />}
                     {activeTab === 'chats' && <AdminChats />}
                     {activeTab === 'careers' && <CareersManagement />}
+                    {activeTab === 'recycleBin' && <RecycleBin />}
                   </>
                 )}
               </Suspense>

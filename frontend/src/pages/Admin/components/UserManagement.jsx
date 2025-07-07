@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { getAllUsers, createUser, updateUser, deleteUser, toggleUserStatus } from "../../../services/operations/adminAPI";
+import { moveToRecycleBin } from "../../../services/operations/recycleBinAPI";
 import { FaEdit, FaTrash, FaEye, FaEyeSlash, FaUser, FaPlus, FaSearch, FaCopy, FaFileCsv, FaFileExcel, FaFilePdf, FaPrint } from "react-icons/fa";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { toast } from "react-hot-toast";
@@ -183,12 +184,12 @@ const UserManagement = () => {
       setError(null);
 
       // Log deletion attempt
-      console.log('Attempting to delete user:', {
+      console.log('Attempting to move user to recycle bin:', {
         userId,
         tokenExists: !!token
       });
       
-      const result = await deleteUser(userId, token);
+      const result = await moveToRecycleBin(token, 'User', userId, 'User moved to recycle bin by admin');
       
       if (result) {
         setConfirmationModal(null);
@@ -196,14 +197,14 @@ const UserManagement = () => {
       }
       
     } catch (error) {
-      console.error('Delete operation failed:', {
+      console.error('Move to recycle bin operation failed:', {
         error: error.message,
         userId,
         response: error.response?.data
       });
       
       // Show specific error message
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to delete user';
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to move user to recycle bin';
       setError(errorMessage);
       setConfirmationModal(null);
       
@@ -795,9 +796,9 @@ const UserManagement = () => {
                           <button
                             onClick={() => {
                               setConfirmationModal({
-                                text1: "Delete User?",
-                                text2: "This action cannot be undone. The user will be permanently deleted.",
-                                btn1Text: "Delete",
+                                text1: "Move User to Recycle Bin?",
+                                text2: `Are you sure you want to move "${user.firstName} ${user.lastName}" to recycle bin? The user will be automatically deleted after 30 days, but you can restore them anytime before that.`,
+                                btn1Text: "Move to Recycle Bin",
                                 btn2Text: "Cancel",
                                 btn1Handler: () => handleDeleteUser(user._id),
                                 btn2Handler: () => setConfirmationModal(null),
@@ -807,7 +808,7 @@ const UserManagement = () => {
                             className={`text-red-500 hover:text-red-600 ${
                               deletingUserId === user._id ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
-                            title="Delete User"
+                            title="Move to Recycle Bin"
                           >
                             {deletingUserId === user._id ? (
                               <div className="w-4 h-4 animate-spin rounded-full border-b-2 border-red-500"/>
@@ -898,9 +899,9 @@ const UserManagement = () => {
                     <button
                       onClick={() => {
                         setConfirmationModal({
-                          text1: "Delete User?",
-                          text2: "This action cannot be undone. The user will be permanently deleted.",
-                          btn1Text: "Delete",
+                          text1: "Move User to Recycle Bin?",
+                          text2: `Are you sure you want to move "${user.firstName} ${user.lastName}" to recycle bin? The user will be automatically deleted after 30 days, but you can restore them anytime before that.`,
+                          btn1Text: "Move to Recycle Bin",
                           btn2Text: "Cancel",
                           btn1Handler: () => handleDeleteUser(user._id),
                           btn2Handler: () => setConfirmationModal(null),
@@ -910,7 +911,7 @@ const UserManagement = () => {
                       className={`p-2 rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20 transition-colors ${
                         deletingUserId === user._id ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
-                      title="Delete User"
+                      title="Move to Recycle Bin"
                     >
                       {deletingUserId === user._id ? (
                         <div className="w-4 h-4 animate-spin rounded-full border-b-2 border-red-500"/>

@@ -34,6 +34,7 @@ const userAnalyticsRoutes = require('./routes/userAnalytics');
 const chatRoutes = require('./routes/chat');
 const jobRoutes = require('./routes/jobs');
 const jobApplicationRoutes = require('./routes/jobApplications');
+const recycleBinRoutes = require('./routes/recycleBin');
 
 // middleware 
 app.use(cookieParser());
@@ -242,6 +243,8 @@ app.use('/api/v1/chat', chatRoutes);
 app.use('/api/v1/jobs', jobRoutes);
 // Job Application Routes
 app.use('/api/v1/job-applications', jobApplicationRoutes);
+// Recycle Bin Routes
+app.use('/api/v1/recycle-bin', recycleBinRoutes);
 
 // Default Route
 app.get('/', (req, res) => {
@@ -276,6 +279,10 @@ app.use((err, req, res, next) => {
 // connections
 connectDB();
 initializeStorageBuckets();
+
+// Initialize recycle bin cleanup scheduler
+const { scheduleCleanup } = require('./scripts/recycleBinCleanup');
+scheduleCleanup();
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {

@@ -331,25 +331,32 @@ exports.getEnrolledCourses = async (req, res) => {
             // Determine if course should be accessible
             let isAccessible = true;
             let isDeactivated = false;
+            let isOrderInactive = false;
             
-            // Check if there's any order (active or inactive) for this course
-            const anyOrder = await Order.findOne({
-                user: userId,
-                course: course._id
-            });
-            
-            if (anyOrder) {
-                // If there's an order, check its status
-                if (!anyOrder.status) {
-                    // Order exists but is inactive - course is deactivated
-                    isDeactivated = true;
+            // First check if course is deleted by admin (in recycle bin)
+            if (course.isDeactivated) {
+                isDeactivated = true;
+                isAccessible = false;
+            } else {
+                // Check if there's any order (active or inactive) for this course
+                const anyOrder = await Order.findOne({
+                    user: userId,
+                    course: course._id
+                });
+                
+                if (anyOrder) {
+                    // If there's an order, check its status
+                    if (!anyOrder.status) {
+                        // Order exists but is inactive - different from recycle bin deletion
+                        isOrderInactive = true;
+                        isAccessible = false;
+                    }
+                } else if (!isFree) {
+                    // For paid courses without any order, they shouldn't be accessible
                     isAccessible = false;
                 }
-            } else if (!isFree) {
-                // For paid courses without any order, they shouldn't be accessible
-                isAccessible = false;
+                // Free courses without orders remain accessible
             }
-            // Free courses without orders remain accessible
 
             // Calculate course details
             let totalDurationInSeconds = 0
@@ -406,6 +413,7 @@ exports.getEnrolledCourses = async (req, res) => {
             
             // Add deactivation status to course object
             course.isDeactivated = isDeactivated;
+            course.isOrderInactive = isOrderInactive;
             course.isAccessible = isAccessible;
             
             // Add course to list
